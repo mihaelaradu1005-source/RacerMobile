@@ -16,6 +16,7 @@
 /builds/
 /exports/
 *.apk
+*.apk.idsig
 *.aab
 *.ipa
 *.exe
@@ -50,4 +51,6 @@ logs/
 release.keystore
 debug.keystore
 android/release_keystore.cfg
-export_presets.cfg
+# NOTE: export_presets.cfg IS tracked — it contains project-level export config
+# (package name, permissions, architectures). Keystore credentials are stored
+# in Editor Settings (per-machine), NOT in export_presets.cfg.

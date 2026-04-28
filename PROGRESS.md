@@ -3,25 +3,31 @@
 Joc de curse pentru mobil, construit în Godot 4.3+ cu GDScript.
 Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
-**Faza curentă:** Faza 0 — Setup
+**Faza curentă:** ✅ Faza 0 completă — pregătire pentru Faza 1
 **Ultima actualizare:** 2026-04-28
 
 ---
 
-## Faza 0 — Setup (Săptămâna 1)
+## Faza 0 — Setup (Săptămâna 1) ✅
 
-- [ ] Instalare Godot 4.3+ (versiunea standard, NU .NET)
-- [ ] Configurare Android export template în Godot
-- [ ] Instalare Android SDK + JDK + adb
-- [ ] Creare repo GitHub `RacerMobile`
-- [ ] `.gitignore` pentru Godot 4
-- [ ] Structură foldere: `scenes/`, `scripts/`, `assets/`, `resources/`, `tests/`
-- [ ] `README.md` cu instrucțiuni de rulare
-- [ ] `ASSETS_LICENSES.md` pregătit
-- [ ] Scenă inițială cu Label „RacerMobile v0.0.1" pe fundal negru
-- [ ] Export APK debug
-- [ ] Instalare APK pe telefon și verificare că pornește
-- [ ] **Deliverable:** APK care pornește pe telefon și afișează ecran negru cu textul „RacerMobile v0.0.1"
+- [x] Instalare Godot 4.6.2 stable (Standard, win64)
+- [x] Configurare Android export template în Godot
+- [x] Instalare Android SDK + JDK 25 + adb
+- [x] Creare repo GitHub `mihaelaradu1005-source/RacerMobile`
+- [x] `.gitignore` pentru Godot 4
+- [x] Structură foldere: `scenes/`, `scripts/`, `assets/`, `resources/`, `tests/`
+- [x] `README.md` cu instrucțiuni de rulare
+- [x] `ASSETS_LICENSES.md` pregătit
+- [x] Scenă inițială cu Label „RacerMobile v0.0.1" pe fundal negru
+- [x] Export APK debug (`com.maid.racermobile`, 27.6 MB)
+- [x] Instalare APK pe telefon și verificare că pornește
+- [x] **Deliverable:** APK care pornește pe telefon și afișează ecran negru cu textul „RacerMobile v0.0.1" ✓
+
+**Decizii / abateri de la plan:**
+- Folosim Godot 4.6.2 (mai nou decât 4.3) — compatibil înapoi.
+- JDK 25 LTS în loc de 17 — Adoptium servește 25 ca LTS curent. A funcționat fără probleme la build.
+- `display/window/handheld/orientation = 1` (landscape) setat din Faza 0 — pregătit pentru jocul de curse.
+- `Jolt Physics` ca engine 3D — default Godot 4.6, foarte bun pentru fizică auto.
 
 ---
 
@@ -106,6 +112,16 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
 <!-- La finalul fiecărei sesiuni adaugă aici scurt: ce am terminat, ce urmează. -->
 
-### 2026-04-28 — Sesiune 1
-- Creat `PROGRESS.md`, `.gitignore`, `README.md`, `ASSETS_LICENSES.md`
-- Următor: instalare Godot 4.3+, Android export template, primul APK
+### 2026-04-28 — Sesiune 1 ✅ Faza 0 încheiată
+- Creat docs (`PROGRESS.md`, `.gitignore`, `README.md`, `ASSETS_LICENSES.md`)
+- Repo Git inițializat și pushed pe `mihaelaradu1005-source/RacerMobile`
+- Structură foldere creată cu `.gitkeep`-uri
+- Scena `scenes/main.tscn` cu Label centrat
+- `project.godot` configurat: main_scene + display landscape 1280×720
+- JDK 25 + Android SDK + Android Studio + `debug.keystore` instalate
+- Editor Settings configurat (Android SDK Path, Java SDK Path, Debug Keystore + Pass + User)
+- Export preset Android cu Unique Name `com.maid.racermobile`
+- ETC2 ASTC texture compression activat
+- APK 27.6 MB construit, instalat cu `adb install` pe telefon `37241FDJG007FB`
+- App lansată: ecran negru + „RacerMobile v0.0.1" în landscape ✓
+- **Următoarea sesiune:** Faza 1 — primul cub controlabil în 3D
