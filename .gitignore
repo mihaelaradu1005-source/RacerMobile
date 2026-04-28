@@ -1,0 +1,53 @@
+# =========================
+# Godot 4 .gitignore
+# =========================
+
+# Godot 4+ specific ignores
+.godot/
+/android/
+/ios/
+*.translation
+
+# Imported assets cache (Godot regenerates these)
+*.import
+.import/
+
+# Exported builds (we keep source, not binaries)
+/builds/
+/exports/
+*.apk
+*.aab
+*.ipa
+*.exe
+*.dmg
+*.zip
+
+# Mono / .NET specific (we don't use C#, but just in case)
+.mono/
+data_*/
+mono_crash.*.json
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temp
+*.log
+*.tmp
+logs/
+
+# Local-only secrets / keystores (NU urca chei pe GitHub!)
+*.keystore
+*.jks
+release.keystore
+debug.keystore
+android/release_keystore.cfg
+export_presets.cfg
