@@ -34,11 +34,11 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 ## Faza 1 — Movement de bază 3D (Săptămâna 2-3)
 
 - [x] Scenă 3D cu o platformă plată (PlaneMesh + StaticBody3D)
-- [x] Cub controlabil (CharacterBody3D + MeshInstance3D) — deocamdată doar cu tastatura
-- [ ] Joystick virtual stânga (input touch) ← urmează: fără el, cubul NU se mișcă pe telefon
-- [ ] Butoane dreapta (input touch)
-- [ ] Cameră third-person cu smoothing (Camera3D + script de follow) ← acum camera e fixă
-- [ ] Test pe telefon
+- [x] Cub controlabil (CharacterBody3D + MeshInstance3D)
+- [x] Joystick virtual stânga (input touch) — desenat din cod, jumătatea stângă a ecranului
+- [ ] Butoane dreapta (input touch) — amânat: cubul n-are încă acțiuni; vin cu mașina în Faza 2
+- [x] Cameră third-person cu smoothing (Camera3D + script de follow)
+- [ ] Test pe telefon ← urmează: build APK + verificare pe telefonul tău
 - [ ] **Deliverable:** cub controlabil de pe telefon, fără fizică de mașină încă
 
 ---

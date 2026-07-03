@@ -20,6 +20,14 @@ extends CharacterBody3D
 # Default 3D gravity from project settings (falls back to 9.8 if unset).
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 
+# The on-screen touch joystick, if present (found by group at runtime).
+var _joystick: Node = null
+
+
+func _ready() -> void:
+	# Grab the virtual joystick without wiring a node path in the scene.
+	_joystick = get_tree().get_first_node_in_group("joystick")
+
 
 func _physics_process(delta: float) -> void:
 	# 1. Read the four directional actions as a single 2D vector in [-1, 1].
@@ -28,6 +36,11 @@ func _physics_process(delta: float) -> void:
 		"move_left", "move_right",
 		"move_forward", "move_back"
 	)
+
+	# 1b. Add the touch joystick (same x/y convention) and clamp to unit length
+	#     so keyboard + touch together can't exceed full speed.
+	if _joystick != null and _joystick.output != Vector2.ZERO:
+		input_dir = (input_dir + _joystick.output).limit_length(1.0)
 
 	# 2. Translate the 2D input into a horizontal target velocity in 3D.
 	#    World axes here: +X is right, +Z is "back" (away from camera).

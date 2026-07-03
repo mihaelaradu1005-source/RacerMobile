@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cfb1r12fte3xg"]
+[gd_scene load_steps=10 format=3 uid="uid://cfb1r12fte3xg"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="2_camera"]
+[ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="3_joystick"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMat"]
 albedo_color = Color(0.35, 0.55, 0.3, 1)
@@ -49,3 +51,16 @@ shape = SubResource("PlayerShape")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.832, 0.555, 0, -0.555, 0.832, 0, 8, 12)
+script = ExtResource("2_camera")
+target_path = NodePath("../Player")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Joystick" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_joystick")
