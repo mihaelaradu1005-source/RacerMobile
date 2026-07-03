@@ -3,7 +3,7 @@
 Joc de curse pentru mobil, construit în Godot 4.3+ cu GDScript.
 Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
-**Faza curentă:** 🚧 Faza 1 în lucru — cub controlabil 3D (movement de bază)
+**Faza curentă:** 🚧 Faza 2 în lucru — vehicul cu raycast (mașină pe 4 roți)
 **Ultima actualizare:** 2026-07-03
 
 ---
@@ -45,13 +45,19 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
 ## Faza 2 — Vehicul cu raycast (Săptămâna 4-6)
 
-- [ ] Înlocuire cub cu `VehicleBody3D`
-- [ ] 4 roți pe raycast (`VehicleWheel3D`)
-- [ ] Suspensii cu spring + damper, parametri `@export`
-- [ ] Accelerație + frână + viraj (fără transmisie încă)
-- [ ] Pistă de test dreaptă din ProtoMesh-uri
-- [ ] Test pe telefon
+- [x] Înlocuire cub cu `VehicleBody3D` — confirmat că merge cu Jolt (test automat)
+- [x] 4 roți pe raycast (`VehicleWheel3D`) — 2 față (direcție), 2 spate (tracțiune)
+- [x] Suspensii cu spring + damper, parametri `@export`
+- [x] Accelerație + frână + viraj (fără transmisie încă)
+- [x] Pistă de test cu praguri (denivelări) — `world.tscn` are 3 praguri
+- [ ] Test pe telefon ← urmează: build APK + verificare pe telefonul tău
 - [ ] **Deliverable:** mașină care merge, virează, se balansează credibil pe denivelări
+
+**Note Faza 2:**
+- Verificat automat (headless): mașina stă pe 4 roți, accelerează stabil, virează corect (dreapta = dreapta). Fără NaN/instabilități.
+- Camera e acum „chase cam" — stă în spatele mașinii și se rotește cu ea la viraje.
+- `tests/vehicle_test.tscn` = test automat reutilizabil pentru fizica mașinii.
+- De reglat pe telefon după feel: `max_engine_force`, `max_steer_angle`, `steer_speed`, `wheel_friction_slip`, parametrii de suspensie.
 
 ---
 

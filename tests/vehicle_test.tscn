@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvehicletest0ph2"]
+
+[ext_resource type="PackedScene" path="res://scenes/car.tscn" id="1_car"]
+[ext_resource type="Script" path="res://tests/vehicle_test.gd" id="2_test"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMat"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="GroundBox"]
+size = Vector3(200, 0.4, 200)
+
+[node name="VehicleTest" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707, 0.707, 0, -0.707, 0.707, 0, 10, 0)
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+shape = SubResource("GroundBox")
+
+[node name="Car" parent="." instance=ExtResource("1_car")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Tester" type="Node" parent="."]
+script = ExtResource("2_test")
+car_path = NodePath("../Car")

@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://cfb1r12fte3xg"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
-[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="2_camera"]
-[ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="3_joystick"]
+[ext_resource type="Script" path="res://scripts/camera_follow.gd" id="1_camera"]
+[ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick"]
+[ext_resource type="PackedScene" path="res://scenes/car.tscn" id="3_car"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMat"]
 albedo_color = Color(0.35, 0.55, 0.3, 1)
@@ -10,19 +10,21 @@ roughness = 0.9
 
 [sub_resource type="PlaneMesh" id="GroundPlane"]
 material = SubResource("GroundMat")
-size = Vector2(40, 40)
+size = Vector2(200, 200)
 
 [sub_resource type="BoxShape3D" id="GroundBox"]
-size = Vector3(40, 0.2, 40)
+size = Vector3(200, 0.2, 200)
 
-[sub_resource type="StandardMaterial3D" id="PlayerMat"]
-albedo_color = Color(0.9, 0.25, 0.25, 1)
-roughness = 0.5
+[sub_resource type="StandardMaterial3D" id="BumpMat"]
+albedo_color = Color(0.85, 0.75, 0.1, 1)
+roughness = 0.7
 
-[sub_resource type="BoxMesh" id="PlayerBox"]
-material = SubResource("PlayerMat")
+[sub_resource type="BoxMesh" id="BumpMesh"]
+material = SubResource("BumpMat")
+size = Vector3(12, 0.18, 0.6)
 
-[sub_resource type="BoxShape3D" id="PlayerShape"]
+[sub_resource type="BoxShape3D" id="BumpShape"]
+size = Vector3(12, 0.18, 0.6)
 
 [node name="World" type="Node3D"]
 
@@ -39,20 +41,39 @@ mesh = SubResource("GroundPlane")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("GroundBox")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-script = ExtResource("1_player")
+[node name="Bumps" type="StaticBody3D" parent="."]
 
-[node name="PlayerMesh" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("PlayerBox")
+[node name="Bump1Mesh" type="MeshInstance3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+mesh = SubResource("BumpMesh")
 
-[node name="PlayerCollision" type="CollisionShape3D" parent="Player"]
-shape = SubResource("PlayerShape")
+[node name="Bump1Col" type="CollisionShape3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+shape = SubResource("BumpShape")
+
+[node name="Bump2Mesh" type="MeshInstance3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17)
+mesh = SubResource("BumpMesh")
+
+[node name="Bump2Col" type="CollisionShape3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17)
+shape = SubResource("BumpShape")
+
+[node name="Bump3Mesh" type="MeshInstance3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+mesh = SubResource("BumpMesh")
+
+[node name="Bump3Col" type="CollisionShape3D" parent="Bumps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+shape = SubResource("BumpShape")
+
+[node name="Car" parent="." instance=ExtResource("3_car")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.832, 0.555, 0, -0.555, 0.832, 0, 8, 12)
-script = ExtResource("2_camera")
-target_path = NodePath("../Player")
+script = ExtResource("1_camera")
+target_path = NodePath("../Car")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -63,4 +84,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_joystick")
+script = ExtResource("2_joystick")
