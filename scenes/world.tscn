@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfb1r12fte3xg"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMat"]
+albedo_color = Color(0.35, 0.55, 0.3, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="GroundPlane"]
+material = SubResource("GroundMat")
+size = Vector2(40, 40)
+
+[sub_resource type="BoxShape3D" id="GroundBox"]
+size = Vector3(40, 0.2, 40)
+
+[sub_resource type="StandardMaterial3D" id="PlayerMat"]
+albedo_color = Color(0.9, 0.25, 0.25, 1)
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="PlayerBox"]
+material = SubResource("PlayerMat")
+
+[sub_resource type="BoxShape3D" id="PlayerShape"]
+
+[node name="World" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707, 0.707, 0, -0.707, 0.707, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundPlane")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("GroundBox")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("1_player")
+
+[node name="PlayerMesh" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("PlayerBox")
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.832, 0.555, 0, -0.555, 0.832, 0, 8, 12)

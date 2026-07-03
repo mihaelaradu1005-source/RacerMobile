@@ -3,8 +3,8 @@
 Joc de curse pentru mobil, construit în Godot 4.3+ cu GDScript.
 Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
-**Faza curentă:** ✅ Faza 0 completă — pregătire pentru Faza 1
-**Ultima actualizare:** 2026-04-28
+**Faza curentă:** 🚧 Faza 1 în lucru — cub controlabil 3D (movement de bază)
+**Ultima actualizare:** 2026-07-03
 
 ---
 
@@ -33,11 +33,11 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
 ## Faza 1 — Movement de bază 3D (Săptămâna 2-3)
 
-- [ ] Scenă 3D cu o platformă plată (PlaneMesh + StaticBody3D)
-- [ ] Cub controlabil (CharacterBody3D + MeshInstance3D)
-- [ ] Joystick virtual stânga (input touch)
+- [x] Scenă 3D cu o platformă plată (PlaneMesh + StaticBody3D)
+- [x] Cub controlabil (CharacterBody3D + MeshInstance3D) — deocamdată doar cu tastatura
+- [ ] Joystick virtual stânga (input touch) ← urmează: fără el, cubul NU se mișcă pe telefon
 - [ ] Butoane dreapta (input touch)
-- [ ] Cameră third-person cu smoothing (Camera3D + script de follow)
+- [ ] Cameră third-person cu smoothing (Camera3D + script de follow) ← acum camera e fixă
 - [ ] Test pe telefon
 - [ ] **Deliverable:** cub controlabil de pe telefon, fără fizică de mașină încă
 

@@ -2,7 +2,7 @@
 
 Joc de curse 3D pentru mobil cu fizică auto care „se simte" realistă, fără să fie fotorealistă. Inspirat de feel-ul Forza / Gran Turismo, dar adaptat pe constrângerile unui telefon mediu (sub 4GB RAM, GPU mid-range).
 
-**Status:** în dezvoltare — Faza 0 (Setup).
+**Status:** în dezvoltare — Faza 1 (Movement de bază 3D).
 **Platformă target:** Android API 24+ (Android 7+) → iOS 13+ ulterior.
 
 ---
@@ -53,7 +53,7 @@ cd RacerMobile
 - F5 pentru a rula scena principală.
 
 ### 5. Export Android (vezi instrucțiuni detaliate în PROGRESS / sesiunea curentă)
-- Necesită: Android SDK, JDK 17, debug keystore generat.
+- Necesită: Android SDK, JDK 25, debug keystore generat.
 - Project → Export → Android → Export Project (APK debug).
 
 ---
