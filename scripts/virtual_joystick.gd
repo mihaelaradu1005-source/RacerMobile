@@ -30,9 +30,13 @@ var _center: Vector2 = Vector2.ZERO # where the stick was placed
 var _knob: Vector2 = Vector2.ZERO   # current knob position (clamped)
 
 
-func _ready() -> void:
-	# Let player.gd find us without hard-wiring a node path in the scene.
+func _enter_tree() -> void:
+	# Register in the group as early as possible (before any node's _ready), so
+	# the car can find us regardless of node ready-order.
 	add_to_group("joystick")
+
+
+func _ready() -> void:
 	# We read input directly via _input(), so ignore normal GUI mouse routing.
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 

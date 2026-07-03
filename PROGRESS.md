@@ -57,6 +57,10 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 - Verificat automat (headless): mașina stă pe 4 roți, accelerează stabil, virează corect (dreapta = dreapta). Fără NaN/instabilități.
 - Camera e acum „chase cam" — stă în spatele mașinii și se rotește cu ea la viraje.
 - `tests/vehicle_test.tscn` = test automat reutilizabil pentru fizica mașinii.
+- `tests/input_path_test.tscn` = test pentru traseul joystick → mașină (a prins un bug).
+- **Bug reparat:** mașina nu se mișca pe telefon — căuta joystick-ul o singură dată la
+  `_ready()`, înainte ca joystick-ul să se înregistreze (node ready-order). Acum îl caută
+  leneș + joystick-ul se anunță în `_enter_tree()`. Nu s-a văzut pe PC (acolo merge tastatura).
 - De reglat pe telefon după feel: `max_engine_force`, `max_steer_angle`, `steer_speed`, `wheel_friction_slip`, parametrii de suspensie.
 
 ---

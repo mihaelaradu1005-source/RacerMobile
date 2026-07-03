@@ -26,13 +26,15 @@ extends VehicleBody3D
 var _joystick: Node = null
 
 
-func _ready() -> void:
-	_joystick = get_tree().get_first_node_in_group("joystick")
-
-
 func _get_input() -> Vector2:
 	# Combine keyboard and touch joystick, clamped so both together stay in range.
 	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+
+	# Look the joystick up lazily: at _ready() time it may not have registered in
+	# its group yet (node ready-order), so we fetch it the first time we need it.
+	if _joystick == null:
+		_joystick = get_tree().get_first_node_in_group("joystick")
+
 	if _joystick != null and _joystick.output != Vector2.ZERO:
 		input = (input + _joystick.output).limit_length(1.0)
 	return input
