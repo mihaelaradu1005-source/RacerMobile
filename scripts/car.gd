@@ -53,6 +53,12 @@ extends VehicleBody3D
 ## Rear-wheel grip while the handbrake is held — low so the back slides (drift).
 @export var drift_grip: float = 1.8
 
+@export_group("Weight transfer (visual)")
+## How much the body pitches per unit of forward acceleration (rad per m/s²).
+@export var body_pitch_amount: float = 0.02
+## Cap on body pitch in radians (~0.13 ≈ 7°).
+@export var max_body_pitch: float = 0.13
+
 # The on-screen touch joystick, if present (found by group at runtime).
 var _joystick: Node = null
 
@@ -76,12 +82,18 @@ var _shift_cooldown: float = 0.0
 # Drive wheel radius in metres (matches the VehicleWheel3D wheel_radius).
 const WHEEL_RADIUS := 0.35
 
+# Visual body-pitch (weight transfer) state.
+var _chassis: Node3D = null
+var _prev_forward_speed: float = 0.0
+var _body_pitch: float = 0.0
+
 
 func _ready() -> void:
 	_spawn_position = global_position
 	for child in get_children():
 		if child is VehicleWheel3D:
 			_wheels.append(child)
+	_chassis = get_node_or_null("Chassis")
 
 
 func _get_input() -> Vector2:
@@ -146,6 +158,22 @@ func _physics_process(delta: float) -> void:
 	# right (input.x > 0) must steer visually right.
 	var target_steer := -steer_input * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
+
+	_update_body_pitch(forward_speed, delta)
+
+
+func _update_body_pitch(forward_speed: float, delta: float) -> void:
+	# Visual-only weight transfer: pitch the body nose-down when slowing and
+	# nose-up when accelerating. Wheels stay planted, so it reads like the body
+	# rocking on its suspension. Does not affect the physics.
+	if _chassis == null or delta <= 0.0:
+		return
+	var accel := (forward_speed - _prev_forward_speed) / delta
+	_prev_forward_speed = forward_speed
+	# Nose UP on acceleration means a negative rotation about local X, so negate.
+	var target := clampf(-accel * body_pitch_amount, -max_body_pitch, max_body_pitch)
+	_body_pitch = lerpf(_body_pitch, target, 1.0 - exp(-8.0 * delta))
+	_chassis.rotation.x = _body_pitch
 
 
 func _update_gearbox(forward_speed: float, delta: float) -> void:

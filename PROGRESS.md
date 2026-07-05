@@ -3,7 +3,7 @@
 Joc de curse pentru mobil, construit în Godot 4.3+ cu GDScript.
 Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
-**Faza curentă:** 🚧 Faza 3 în lucru — fizică auto avansată (suprafețe ✓, urmează derapaj/trepte)
+**Faza curentă:** ✅ Faza 3 completă — urmează Faza 4 (pistă + AI + cronometru)
 **Ultima actualizare:** 2026-07-05
 
 ---
@@ -78,10 +78,10 @@ centru de greutate coborât (nu se răstoarnă), redresare automată la răsturn
 - [~] Model anvelope: derapaj prin frână de mână (grip redus pe spate) — Pacejka amânată
 - [x] Transmisie cu trepte (automată) — 5 trepte, turație + treaptă în HUD
 - [x] Coeficient de fricțiune diferit asfalt vs. iarbă — roțile detectează grupul `low_grip`
-- [ ] Transfer de greutate la accelerație/frânare
+- [x] Transfer de greutate la accelerație/frânare — pitch vizual al caroseriei (bot sus/jos)
 - [x] Derapaj controlat — buton „DRIFT" dreapta: scade aderența spate → derapaj recuperabil
-- [ ] Test pe telefon (derapaj)
-- [ ] **Deliverable:** derapaj credibil, limite de aderență, comportament diferit pe suprafețe
+- [x] Test pe telefon (derapaj) — confirmat de Mihaela: „funcționează ok"
+- [x] **Deliverable:** derapaj credibil, limite de aderență, comportament diferit pe suprafețe ✓
 
 **Adăugiri Faza 3:** buton dreapta (frână de mână/drift) + HUD viteză/treaptă. Teste noi:
 `surface_test`, `steer_dir_test` (direcție pe ecran vs cameră), `drift_test`.
