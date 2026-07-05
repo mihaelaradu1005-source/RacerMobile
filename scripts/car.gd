@@ -11,10 +11,23 @@ extends VehicleBody3D
 #   stick left/right = steer
 
 ## Peak drive force applied to the traction wheels (Newtons-ish).
-@export var max_engine_force: float = 1400.0
+@export var max_engine_force: float = 1600.0
 
 ## Top speed in m/s; above this the engine stops pushing (~18 m/s ≈ 65 km/h).
 @export var max_speed: float = 18.0
+
+@export_group("Automatic gearbox")
+## Gear ratios, low to high. More gears = smoother stepped acceleration.
+@export var gear_ratios: Array[float] = [2.9, 1.9, 1.4, 1.05, 0.82]
+## Overall drive ratio multiplier (tunes what speed maps to what RPM).
+@export var final_drive: float = 12.0
+## Shift up when engine RPM climbs past this.
+@export var upshift_rpm: float = 5800.0
+## Shift down when engine RPM drops below this.
+@export var downshift_rpm: float = 2600.0
+## Idle floor and redline ceiling for the simulated engine RPM.
+@export var idle_rpm: float = 900.0
+@export var max_rpm: float = 6500.0
 
 ## Brake force applied when reversing against forward motion.
 @export var max_brake_force: float = 60.0
@@ -48,6 +61,14 @@ var _spawn_position: Vector3 = Vector3.ZERO
 
 # Cached wheels, so we can adjust their grip per surface each frame.
 var _wheels: Array[VehicleWheel3D] = []
+
+# Gearbox state (also read later by the HUD and engine sound).
+var _gear: int = 0            # 0-based index into gear_ratios
+var _rpm: float = 900.0
+var _shift_cooldown: float = 0.0
+
+# Drive wheel radius in metres (matches the VehicleWheel3D wheel_radius).
+const WHEEL_RADIUS := 0.35
 
 
 func _ready() -> void:
@@ -84,13 +105,18 @@ func _physics_process(delta: float) -> void:
 	# (Positive engine_force drives the car toward +Z, so that is "forward".)
 	var forward_speed := global_transform.basis.z.dot(linear_velocity)
 
+	# Automatic gearbox: pick a gear and a torque multiplier from engine RPM,
+	# so acceleration comes in believable steps instead of one flat pull.
+	_update_gearbox(forward_speed, delta)
+	var torque := _torque_factor(_rpm)
+
 	# If the driver pushes opposite to current motion, treat it as braking;
 	# otherwise it's engine force. This gives a simple, intuitive gas/brake.
 	if throttle * forward_speed < -0.1:
 		engine_force = 0.0
 		brake = max_brake_force
 	else:
-		engine_force = throttle * max_engine_force
+		engine_force = throttle * max_engine_force * torque
 		brake = 0.0
 
 	# Cap the top speed: once we're already at max, stop adding engine force.
@@ -114,6 +140,29 @@ func _physics_process(delta: float) -> void:
 	# right (input.x > 0) must steer visually right.
 	var target_steer := -steer_input * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
+
+
+func _update_gearbox(forward_speed: float, delta: float) -> void:
+	# Engine RPM implied by how fast the wheels turn in the current gear.
+	var v := maxf(forward_speed, 0.0)
+	var wheel_rev_per_s := v / (TAU * WHEEL_RADIUS)
+	_rpm = clampf(wheel_rev_per_s * 60.0 * gear_ratios[_gear] * final_drive, idle_rpm, max_rpm)
+
+	# Shift with a short cooldown so it can't flutter between two gears.
+	_shift_cooldown = maxf(0.0, _shift_cooldown - delta)
+	if _shift_cooldown > 0.0:
+		return
+	if _rpm >= upshift_rpm and _gear < gear_ratios.size() - 1:
+		_gear += 1
+		_shift_cooldown = 0.4
+	elif _rpm <= downshift_rpm and _gear > 0:
+		_gear -= 1
+		_shift_cooldown = 0.4
+
+
+func _torque_factor(rpm: float) -> float:
+	# Simple torque curve: strongest in the mid-range, weaker near idle/redline.
+	return clampf(1.0 - 0.6 * absf(rpm - 4000.0) / 4000.0, 0.35, 1.0)
 
 
 func _update_surface_grip() -> void:

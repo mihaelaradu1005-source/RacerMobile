@@ -40,16 +40,16 @@ func _physics_process(_delta: float) -> void:
 			_joy.output = Vector2(0.7, -0.7)
 			phase = "FWD+RIGHT"
 
-	if _frames % 30 == 0:
+	if _frames % 20 == 0:
 		var kmh := 0.0
-		var up_y := 1.0
-		var yaw := 0.0
+		var gear := 0
+		var rpm := 0.0
 		if _car != null:
 			kmh = _car.linear_velocity.length() * 3.6
-			up_y = _car.global_transform.basis.y.y   # 1 = level, <0 = flipped
-			yaw = rad_to_deg(_car.rotation.y)
-		print("frame=%d  %s  speed=%.1f km/h  yaw=%.0f  up_y=%.2f (%s)" % [
-			_frames, phase, kmh, yaw, up_y, ("upright" if up_y > 0.5 else "TIPPED")])
+			gear = _car._gear + 1
+			rpm = _car._rpm
+		print("frame=%d  %s  speed=%.1f km/h  gear=%d  rpm=%.0f" % [
+			_frames, phase, kmh, gear, rpm])
 
 	if _frames >= 300:
 		print("INPUTTEST DONE")
