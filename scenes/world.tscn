@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cfb1r12fte3xg"]
+[gd_scene load_steps=15 format=3 uid="uid://cfb1r12fte3xg"]
 
 [ext_resource type="Script" path="res://scripts/camera_follow.gd" id="1_camera"]
 [ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick"]
@@ -25,6 +25,24 @@ size = Vector3(12, 0.18, 0.6)
 
 [sub_resource type="BoxShape3D" id="BumpShape"]
 size = Vector3(12, 0.18, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="WallMat"]
+albedo_color = Color(0.5, 0.5, 0.55, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="WallMeshX"]
+material = SubResource("WallMat")
+size = Vector3(202, 3, 1)
+
+[sub_resource type="BoxShape3D" id="WallShapeX"]
+size = Vector3(202, 3, 1)
+
+[sub_resource type="BoxMesh" id="WallMeshZ"]
+material = SubResource("WallMat")
+size = Vector3(1, 3, 202)
+
+[sub_resource type="BoxShape3D" id="WallShapeZ"]
+size = Vector3(1, 3, 202)
 
 [node name="World" type="Node3D"]
 
@@ -66,6 +84,40 @@ mesh = SubResource("BumpMesh")
 [node name="Bump3Col" type="CollisionShape3D" parent="Bumps"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 shape = SubResource("BumpShape")
+
+[node name="Walls" type="StaticBody3D" parent="."]
+
+[node name="WallNorthMesh" type="MeshInstance3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 100)
+mesh = SubResource("WallMeshX")
+
+[node name="WallNorthCol" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 100)
+shape = SubResource("WallShapeX")
+
+[node name="WallSouthMesh" type="MeshInstance3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -100)
+mesh = SubResource("WallMeshX")
+
+[node name="WallSouthCol" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -100)
+shape = SubResource("WallShapeX")
+
+[node name="WallEastMesh" type="MeshInstance3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 1.5, 0)
+mesh = SubResource("WallMeshZ")
+
+[node name="WallEastCol" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 1.5, 0)
+shape = SubResource("WallShapeZ")
+
+[node name="WallWestMesh" type="MeshInstance3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 1.5, 0)
+mesh = SubResource("WallMeshZ")
+
+[node name="WallWestCol" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 1.5, 0)
+shape = SubResource("WallShapeZ")
 
 [node name="Car" parent="." instance=ExtResource("3_car")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

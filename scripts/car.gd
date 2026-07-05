@@ -19,8 +19,11 @@ extends VehicleBody3D
 ## Brake force applied when reversing against forward motion.
 @export var max_brake_force: float = 60.0
 
-## Maximum steering angle in radians (~0.4 rad ≈ 23°).
-@export var max_steer_angle: float = 0.4
+## Maximum steering angle in radians (~0.33 rad ≈ 19°).
+@export var max_steer_angle: float = 0.33
+
+## Stick sideways movement below this is treated as "straight" (go-straight aid).
+@export var steer_deadzone: float = 0.15
 
 ## How fast the wheels turn toward the target steering angle (rad/s of input).
 @export var steer_speed: float = 3.0
@@ -33,6 +36,13 @@ var _joystick: Node = null
 
 # How long we've been flipped over (for auto-recovery).
 var _upside_time: float = 0.0
+
+# Where the car started, so we can respawn it if it ever falls off the world.
+var _spawn_position: Vector3 = Vector3.ZERO
+
+
+func _ready() -> void:
+	_spawn_position = global_position
 
 
 func _get_input() -> Vector2:
@@ -79,14 +89,25 @@ func _physics_process(delta: float) -> void:
 	var speed := linear_velocity.length()
 	var speed_factor := clampf(1.0 - speed / 35.0, 0.35, 1.0)
 
+	# Small sideways stick offsets read as "straight" so the car tracks straight
+	# instead of drifting into a slow circle when the driver mostly wants forward.
+	var steer_input := input.x
+	if absf(steer_input) < steer_deadzone:
+		steer_input = 0.0
+
 	# Ease the steering toward the target angle so turns aren't instant.
 	# Positive steering turns the car toward +X (driver's right), so pushing the
 	# stick right (input.x > 0) maps straight through.
-	var target_steer := input.x * max_steer_angle * speed_factor
+	var target_steer := steer_input * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
 
 
 func _handle_flip_recovery(delta: float) -> void:
+	# Safety net: if the car somehow falls off the world, put it back at start.
+	if global_position.y < -5.0:
+		_respawn()
+		return
+
 	# The car's own "up" vector; if it points downward we're on our roof/side.
 	if global_transform.basis.y.y < 0.2:
 		_upside_time += delta
@@ -102,5 +123,12 @@ func _upright() -> void:
 	# all momentum so it doesn't immediately roll again.
 	var yaw := rotation.y
 	global_transform = Transform3D(Basis(Vector3.UP, yaw), global_position + Vector3.UP * 1.0)
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+
+
+func _respawn() -> void:
+	# Return to the starting spot, upright and stationary.
+	global_transform = Transform3D(Basis(), _spawn_position + Vector3.UP * 1.0)
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
