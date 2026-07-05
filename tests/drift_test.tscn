@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdrift0test2ph3hb"]
+
+[ext_resource type="PackedScene" path="res://scenes/world.tscn" id="1_world"]
+[ext_resource type="Script" path="res://tests/drift_test.gd" id="2_test"]
+
+[node name="DriftTest" type="Node"]
+
+[node name="World" parent="." instance=ExtResource("1_world")]
+
+[node name="Tester" type="Node" parent="."]
+script = ExtResource("2_test")

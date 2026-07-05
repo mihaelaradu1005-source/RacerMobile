@@ -50,8 +50,14 @@ extends VehicleBody3D
 ## Tyre grip on low-grip surfaces (grass/dirt). Lower = slides more.
 @export var grass_grip: float = 3.0
 
+## Rear-wheel grip while the handbrake is held — low so the back slides (drift).
+@export var drift_grip: float = 1.8
+
 # The on-screen touch joystick, if present (found by group at runtime).
 var _joystick: Node = null
+
+# The on-screen handbrake/drift button, if present (found by group at runtime).
+var _handbrake: Node = null
 
 # How long we've been flipped over (for auto-recovery).
 var _upside_time: float = 0.0
@@ -165,15 +171,25 @@ func _torque_factor(rpm: float) -> float:
 	return clampf(1.0 - 0.6 * absf(rpm - 4000.0) / 4000.0, 0.35, 1.0)
 
 
+func _handbrake_held() -> bool:
+	if _handbrake == null:
+		_handbrake = get_tree().get_first_node_in_group("handbrake")
+	return _handbrake != null and _handbrake.pressed
+
+
 func _update_surface_grip() -> void:
 	# Each wheel checks what it's resting on. Bodies in the "low_grip" group
 	# (grass/dirt) make that wheel slide; everything else is asphalt grip.
+	# Holding the handbrake drops the REAR wheels' grip so the car drifts.
+	var handbrake := _handbrake_held()
 	for wheel in _wheels:
 		var grip := asphalt_grip
 		if wheel.is_in_contact():
 			var body := wheel.get_contact_body()
 			if body != null and body.is_in_group("low_grip"):
 				grip = grass_grip
+		if handbrake and not wheel.use_as_steering:
+			grip = minf(grip, drift_grip)
 		wheel.wheel_friction_slip = grip
 
 

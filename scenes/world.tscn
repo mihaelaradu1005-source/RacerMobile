@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://cfb1r12fte3xg"]
+[gd_scene load_steps=20 format=3 uid="uid://cfb1r12fte3xg"]
 
 [ext_resource type="Script" path="res://scripts/camera_follow.gd" id="1_camera"]
 [ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick"]
 [ext_resource type="PackedScene" path="res://scenes/car.tscn" id="3_car"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/action_button.gd" id="5_button"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMat"]
 albedo_color = Color(0.28, 0.28, 0.3, 1)
@@ -182,3 +183,12 @@ theme_override_font_sizes/font_size = 44
 text = "0 km/h"
 script = ExtResource("4_hud")
 car_path = NodePath("../../Car")
+
+[node name="DriftButton" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_button")

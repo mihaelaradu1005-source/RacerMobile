@@ -75,12 +75,16 @@ centru de greutate coborât (nu se răstoarnă), redresare automată la răsturn
 
 ## Faza 3 — Fizică auto avansată (Săptămâna 7-10)
 
-- [ ] Model anvelope: slip ratio + slip angle (Pacejka simplificată)
-- [ ] Transmisie cu trepte (automată)
+- [~] Model anvelope: derapaj prin frână de mână (grip redus pe spate) — Pacejka amânată
+- [x] Transmisie cu trepte (automată) — 5 trepte, turație + treaptă în HUD
 - [x] Coeficient de fricțiune diferit asfalt vs. iarbă — roțile detectează grupul `low_grip`
 - [ ] Transfer de greutate la accelerație/frânare
-- [ ] Test pe telefon
+- [x] Derapaj controlat — buton „DRIFT" dreapta: scade aderența spate → derapaj recuperabil
+- [ ] Test pe telefon (derapaj)
 - [ ] **Deliverable:** derapaj credibil, limite de aderență, comportament diferit pe suprafețe
+
+**Adăugiri Faza 3:** buton dreapta (frână de mână/drift) + HUD viteză/treaptă. Teste noi:
+`surface_test`, `steer_dir_test` (direcție pe ecran vs cameră), `drift_test`.
 
 **Note Faza 3:** stil ales = echilibrat (realist dar iertător). Suprafețe: teren = asfalt (aderență 9),
 petice de iarbă în grup `low_grip` (aderență 3) → mașina alunecă pe iarbă. `tests/surface_test.tscn`.
