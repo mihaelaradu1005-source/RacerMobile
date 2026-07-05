@@ -3,8 +3,8 @@
 Joc de curse pentru mobil, construit în Godot 4.3+ cu GDScript.
 Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
-**Faza curentă:** 🚧 Faza 2 în lucru — vehicul cu raycast (mașină pe 4 roți)
-**Ultima actualizare:** 2026-07-03
+**Faza curentă:** 🚧 Faza 3 în lucru — fizică auto avansată (suprafețe ✓, urmează derapaj/trepte)
+**Ultima actualizare:** 2026-07-05
 
 ---
 
@@ -50,8 +50,12 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 - [x] Suspensii cu spring + damper, parametri `@export`
 - [x] Accelerație + frână + viraj (fără transmisie încă)
 - [x] Pistă de test cu praguri (denivelări) — `world.tscn` are 3 praguri
-- [ ] Test pe telefon ← urmează: build APK + verificare pe telefonul tău
-- [ ] **Deliverable:** mașină care merge, virează, se balansează credibil pe denivelări
+- [x] Test pe telefon — confirmat de Mihaela: „merge destul de bine"
+- [x] **Deliverable:** mașină care merge, virează, se balansează credibil pe denivelări ✓
+
+**Reglaje finale Faza 2 (după teste pe telefon):** motor 1400 + viteză plafonată ~65 km/h,
+centru de greutate coborât (nu se răstoarnă), redresare automată la răsturnare, viraj 0.33 rad
++ zonă moartă (merge drept când împingi drept), pereți în jurul terenului + respawn la cădere.
 
 **Note Faza 2:**
 - Verificat automat (headless): mașina stă pe 4 roți, accelerează stabil, virează corect (dreapta = dreapta). Fără NaN/instabilități.
@@ -73,10 +77,13 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
 
 - [ ] Model anvelope: slip ratio + slip angle (Pacejka simplificată)
 - [ ] Transmisie cu trepte (automată)
-- [ ] Coeficient de fricțiune diferit asfalt vs. iarbă
+- [x] Coeficient de fricțiune diferit asfalt vs. iarbă — roțile detectează grupul `low_grip`
 - [ ] Transfer de greutate la accelerație/frânare
 - [ ] Test pe telefon
 - [ ] **Deliverable:** derapaj credibil, limite de aderență, comportament diferit pe suprafețe
+
+**Note Faza 3:** stil ales = echilibrat (realist dar iertător). Suprafețe: teren = asfalt (aderență 9),
+petice de iarbă în grup `low_grip` (aderență 3) → mașina alunecă pe iarbă. `tests/surface_test.tscn`.
 
 ---
 

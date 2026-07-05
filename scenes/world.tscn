@@ -1,12 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://cfb1r12fte3xg"]
+[gd_scene load_steps=18 format=3 uid="uid://cfb1r12fte3xg"]
 
 [ext_resource type="Script" path="res://scripts/camera_follow.gd" id="1_camera"]
 [ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick"]
 [ext_resource type="PackedScene" path="res://scenes/car.tscn" id="3_car"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMat"]
-albedo_color = Color(0.35, 0.55, 0.3, 1)
-roughness = 0.9
+albedo_color = Color(0.28, 0.28, 0.3, 1)
+roughness = 0.95
 
 [sub_resource type="PlaneMesh" id="GroundPlane"]
 material = SubResource("GroundMat")
@@ -43,6 +43,17 @@ size = Vector3(1, 3, 202)
 
 [sub_resource type="BoxShape3D" id="WallShapeZ"]
 size = Vector3(1, 3, 202)
+
+[sub_resource type="StandardMaterial3D" id="GrassMat"]
+albedo_color = Color(0.3, 0.55, 0.25, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="GrassMesh"]
+material = SubResource("GrassMat")
+size = Vector3(45, 0.1, 45)
+
+[sub_resource type="BoxShape3D" id="GrassShape"]
+size = Vector3(45, 0.1, 45)
 
 [node name="World" type="Node3D"]
 
@@ -84,6 +95,26 @@ mesh = SubResource("BumpMesh")
 [node name="Bump3Col" type="CollisionShape3D" parent="Bumps"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 shape = SubResource("BumpShape")
+
+[node name="Grass1" type="StaticBody3D" parent="." groups=["low_grip"]]
+
+[node name="Grass1Mesh" type="MeshInstance3D" parent="Grass1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 0.02, 45)
+mesh = SubResource("GrassMesh")
+
+[node name="Grass1Col" type="CollisionShape3D" parent="Grass1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 0.02, 45)
+shape = SubResource("GrassShape")
+
+[node name="Grass2" type="StaticBody3D" parent="." groups=["low_grip"]]
+
+[node name="Grass2Mesh" type="MeshInstance3D" parent="Grass2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0.02, -35)
+mesh = SubResource("GrassMesh")
+
+[node name="Grass2Col" type="CollisionShape3D" parent="Grass2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0.02, -35)
+shape = SubResource("GrassShape")
 
 [node name="Walls" type="StaticBody3D" parent="."]
 

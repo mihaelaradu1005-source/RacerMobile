@@ -31,6 +31,12 @@ extends VehicleBody3D
 ## Seconds spent upside-down before the car auto-rights itself.
 @export var flip_recover_time: float = 2.0
 
+## Tyre grip on normal ground (asphalt). Higher = sticks harder.
+@export var asphalt_grip: float = 9.0
+
+## Tyre grip on low-grip surfaces (grass/dirt). Lower = slides more.
+@export var grass_grip: float = 3.0
+
 # The on-screen touch joystick, if present (found by group at runtime).
 var _joystick: Node = null
 
@@ -40,9 +46,15 @@ var _upside_time: float = 0.0
 # Where the car started, so we can respawn it if it ever falls off the world.
 var _spawn_position: Vector3 = Vector3.ZERO
 
+# Cached wheels, so we can adjust their grip per surface each frame.
+var _wheels: Array[VehicleWheel3D] = []
+
 
 func _ready() -> void:
 	_spawn_position = global_position
+	for child in get_children():
+		if child is VehicleWheel3D:
+			_wheels.append(child)
 
 
 func _get_input() -> Vector2:
@@ -61,6 +73,7 @@ func _get_input() -> Vector2:
 
 func _physics_process(delta: float) -> void:
 	_handle_flip_recovery(delta)
+	_update_surface_grip()
 
 	var input := _get_input()
 
@@ -100,6 +113,18 @@ func _physics_process(delta: float) -> void:
 	# stick right (input.x > 0) maps straight through.
 	var target_steer := steer_input * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
+
+
+func _update_surface_grip() -> void:
+	# Each wheel checks what it's resting on. Bodies in the "low_grip" group
+	# (grass/dirt) make that wheel slide; everything else is asphalt grip.
+	for wheel in _wheels:
+		var grip := asphalt_grip
+		if wheel.is_in_contact():
+			var body := wheel.get_contact_body()
+			if body != null and body.is_in_group("low_grip"):
+				grip = grass_grip
+		wheel.wheel_friction_slip = grip
 
 
 func _handle_flip_recovery(delta: float) -> void:
