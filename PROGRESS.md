@@ -93,14 +93,18 @@ petice de iarbă în grup `low_grip` (aderență 3) → mașina alunecă pe iarb
 
 ## Faza 4 — Pistă completă + AI (Săptămâna 11-14)
 
-- [ ] Pistă închisă oval simplu
-- [ ] Pistă cu 8-10 viraje
-- [ ] Sistem checkpoint-uri (Area3D)
-- [ ] Cronometrare lap + best time
+- [x] Pistă închisă (circuit dreptunghiular în jurul unui bloc central) + linie start/finish
+- [ ] Pistă cu 8-10 viraje (deocamdată circuit simplu)
+- [x] Sistem checkpoint-uri (Area3D) — 4 checkpoint-uri, ordine impusă (fără scurtături)
+- [x] Cronometrare lap + best time — `race_manager.gd`, afișate în HUD
 - [ ] AI care urmărește un spline (`Path3D` + `PathFollow3D`)
 - [ ] AI frânează în viraje
-- [ ] HUD: viteză, treaptă, timp, poziție
+- [~] HUD: viteză, treaptă, timp, poziție (poziție vine cu AI)
 - [ ] **Deliverable:** mod „time trial" + mod „race vs 1 AI", complet jucabile
+
+**Note Faza 4:** `world.tscn` acum e circuit (bloc central `Center`, 4 checkpoint-uri în `Checkpoints`,
+linie start la (70,0,0)). Mașina pleacă la (70,1,-20) sens invers acelor de ceas. `tests/race_test.tscn`
+verifică numărarea tururilor prin teleportare. Bumps/iarba scoase pentru pistă curată. Urmează: AI + poziție.
 
 ---
 
