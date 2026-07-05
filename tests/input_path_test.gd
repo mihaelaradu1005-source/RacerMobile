@@ -42,16 +42,14 @@ func _physics_process(_delta: float) -> void:
 
 	if _frames % 30 == 0:
 		var kmh := 0.0
-		var xx := 0.0
-		var zz := 0.0
+		var up_y := 1.0
 		var yaw := 0.0
 		if _car != null:
 			kmh = _car.linear_velocity.length() * 3.6
-			xx = _car.global_position.x
-			zz = _car.global_position.z
+			up_y = _car.global_transform.basis.y.y   # 1 = level, <0 = flipped
 			yaw = rad_to_deg(_car.rotation.y)
-		print("frame=%d  %s  speed=%.1f km/h  x=%.1f  z=%.1f  yaw=%.0f" % [
-			_frames, phase, kmh, xx, zz, yaw])
+		print("frame=%d  %s  speed=%.1f km/h  yaw=%.0f  up_y=%.2f (%s)" % [
+			_frames, phase, kmh, yaw, up_y, ("upright" if up_y > 0.5 else "TIPPED")])
 
 	if _frames >= 300:
 		print("INPUTTEST DONE")

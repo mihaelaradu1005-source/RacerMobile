@@ -11,19 +11,28 @@ extends VehicleBody3D
 #   stick left/right = steer
 
 ## Peak drive force applied to the traction wheels (Newtons-ish).
-@export var max_engine_force: float = 2200.0
+@export var max_engine_force: float = 1400.0
+
+## Top speed in m/s; above this the engine stops pushing (~18 m/s ≈ 65 km/h).
+@export var max_speed: float = 18.0
 
 ## Brake force applied when reversing against forward motion.
 @export var max_brake_force: float = 60.0
 
-## Maximum steering angle in radians (~0.45 rad ≈ 26°).
-@export var max_steer_angle: float = 0.45
+## Maximum steering angle in radians (~0.4 rad ≈ 23°).
+@export var max_steer_angle: float = 0.4
 
 ## How fast the wheels turn toward the target steering angle (rad/s of input).
 @export var steer_speed: float = 3.0
 
+## Seconds spent upside-down before the car auto-rights itself.
+@export var flip_recover_time: float = 2.0
+
 # The on-screen touch joystick, if present (found by group at runtime).
 var _joystick: Node = null
+
+# How long we've been flipped over (for auto-recovery).
+var _upside_time: float = 0.0
 
 
 func _get_input() -> Vector2:
@@ -41,6 +50,8 @@ func _get_input() -> Vector2:
 
 
 func _physics_process(delta: float) -> void:
+	_handle_flip_recovery(delta)
+
 	var input := _get_input()
 
 	# Forward is "stick up", which is negative y in our convention.
@@ -59,14 +70,37 @@ func _physics_process(delta: float) -> void:
 		engine_force = throttle * max_engine_force
 		brake = 0.0
 
-	# Reduce steering authority as speed rises so the car doesn't spin out at
-	# high speed, while staying nimble when slow. Full angle up to ~easing, down
-	# to 35% at high speed.
+	# Cap the top speed: once we're already at max, stop adding engine force.
+	if absf(forward_speed) >= max_speed:
+		engine_force = 0.0
+
+	# Reduce steering authority as speed rises so the car doesn't spin out or tip
+	# over at high speed, while staying nimble when slow.
 	var speed := linear_velocity.length()
-	var speed_factor := clampf(1.0 - speed / 40.0, 0.35, 1.0)
+	var speed_factor := clampf(1.0 - speed / 35.0, 0.35, 1.0)
 
 	# Ease the steering toward the target angle so turns aren't instant.
 	# Positive steering turns the car toward +X (driver's right), so pushing the
 	# stick right (input.x > 0) maps straight through.
 	var target_steer := input.x * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
+
+
+func _handle_flip_recovery(delta: float) -> void:
+	# The car's own "up" vector; if it points downward we're on our roof/side.
+	if global_transform.basis.y.y < 0.2:
+		_upside_time += delta
+		if _upside_time >= flip_recover_time:
+			_upright()
+			_upside_time = 0.0
+	else:
+		_upside_time = 0.0
+
+
+func _upright() -> void:
+	# Re-place the car level and slightly lifted, keeping its heading, and clear
+	# all momentum so it doesn't immediately roll again.
+	var yaw := rotation.y
+	global_transform = Transform3D(Basis(Vector3.UP, yaw), global_position + Vector3.UP * 1.0)
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
