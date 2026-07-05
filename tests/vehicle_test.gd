@@ -17,25 +17,25 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	_car.engine_force = 260.0     # full throttle
 	_frames += 1
 
-	# After a short run-up, steer with a POSITIVE steering value so we can read
-	# which way positive steering actually turns the car (driver's right = +X).
-	if _frames > 60:
-		_car.steering = 0.3
+	# Full throttle throughout, using the car's own tuned peak force.
+	_car.engine_force = _car.max_engine_force
+
+	# Phase A (straight) then Phase B: full steer, to check it makes a controlled
+	# arc rather than an instant spin-out ("donut").
+	var phase := "STRAIGHT"
+	if _frames > 180:
+		_car.steering = _car.max_steer_angle
+		phase = "TURNING"
 
 	if _frames % 30 == 0:
-		var in_contact := 0
-		for child in _car.get_children():
-			if child is VehicleWheel3D and child.is_in_contact():
-				in_contact += 1
-		var fwd_speed := _car.global_transform.basis.z.dot(_car.linear_velocity)
+		var speed_kmh := _car.linear_velocity.length() * 3.6
 		var yaw_deg := rad_to_deg(_car.rotation.y)
-		print("frame=%d  x=%.2f  z=%.2f  fwd_speed=%.2f  yaw=%.1f  wheels=%d" % [
-			_frames, _car.global_position.x, _car.global_position.z, fwd_speed, yaw_deg, in_contact
+		print("frame=%d  %s  speed=%.1f km/h  x=%.1f  z=%.1f  yaw=%.0f" % [
+			_frames, phase, speed_kmh, _car.global_position.x, _car.global_position.z, yaw_deg
 		])
 
-	if _frames >= 240:
+	if _frames >= 330:
 		print("SELFTEST DONE")
 		get_tree().quit()

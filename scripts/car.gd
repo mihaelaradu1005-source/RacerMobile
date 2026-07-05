@@ -11,16 +11,16 @@ extends VehicleBody3D
 #   stick left/right = steer
 
 ## Peak drive force applied to the traction wheels (Newtons-ish).
-@export var max_engine_force: float = 260.0
+@export var max_engine_force: float = 2200.0
 
 ## Brake force applied when reversing against forward motion.
-@export var max_brake_force: float = 40.0
+@export var max_brake_force: float = 60.0
 
-## Maximum steering angle in radians (~0.6 rad ≈ 35°).
-@export var max_steer_angle: float = 0.6
+## Maximum steering angle in radians (~0.45 rad ≈ 26°).
+@export var max_steer_angle: float = 0.45
 
 ## How fast the wheels turn toward the target steering angle (rad/s of input).
-@export var steer_speed: float = 4.0
+@export var steer_speed: float = 3.0
 
 # The on-screen touch joystick, if present (found by group at runtime).
 var _joystick: Node = null
@@ -59,8 +59,14 @@ func _physics_process(delta: float) -> void:
 		engine_force = throttle * max_engine_force
 		brake = 0.0
 
+	# Reduce steering authority as speed rises so the car doesn't spin out at
+	# high speed, while staying nimble when slow. Full angle up to ~easing, down
+	# to 35% at high speed.
+	var speed := linear_velocity.length()
+	var speed_factor := clampf(1.0 - speed / 40.0, 0.35, 1.0)
+
 	# Ease the steering toward the target angle so turns aren't instant.
 	# Positive steering turns the car toward +X (driver's right), so pushing the
 	# stick right (input.x > 0) maps straight through.
-	var target_steer := input.x * max_steer_angle
+	var target_steer := input.x * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)

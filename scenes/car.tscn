@@ -36,11 +36,11 @@ shape = SubResource("ChassisShape")
 
 [node name="WheelFL" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, -0.25, 1.35)
-use_as_traction = false
+use_as_traction = true
 use_as_steering = true
 wheel_radius = 0.35
 wheel_rest_length = 0.25
-wheel_friction_slip = 3.5
+wheel_friction_slip = 9.0
 suspension_travel = 0.3
 suspension_stiffness = 30.0
 suspension_max_force = 8000.0
@@ -53,11 +53,11 @@ mesh = SubResource("WheelMesh")
 
 [node name="WheelFR" type="VehicleWheel3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, -0.25, 1.35)
-use_as_traction = false
+use_as_traction = true
 use_as_steering = true
 wheel_radius = 0.35
 wheel_rest_length = 0.25
-wheel_friction_slip = 3.5
+wheel_friction_slip = 9.0
 suspension_travel = 0.3
 suspension_stiffness = 30.0
 suspension_max_force = 8000.0
@@ -74,7 +74,7 @@ use_as_traction = true
 use_as_steering = false
 wheel_radius = 0.35
 wheel_rest_length = 0.25
-wheel_friction_slip = 3.5
+wheel_friction_slip = 9.0
 suspension_travel = 0.3
 suspension_stiffness = 30.0
 suspension_max_force = 8000.0
@@ -91,7 +91,7 @@ use_as_traction = true
 use_as_steering = false
 wheel_radius = 0.35
 wheel_rest_length = 0.25
-wheel_friction_slip = 3.5
+wheel_friction_slip = 9.0
 suspension_travel = 0.3
 suspension_stiffness = 30.0
 suspension_max_force = 8000.0

@@ -30,19 +30,29 @@ func _find_vehicle(n: Node) -> VehicleBody3D:
 func _physics_process(_delta: float) -> void:
 	_frames += 1
 
-	# Simulate a thumb holding the stick fully "up" = forward.
+	# Simulate a thumb on the stick: first straight up (forward) to build speed,
+	# then up-and-right (forward + steer) to check turning is controlled.
+	var phase := "FORWARD"
 	if _joy != null:
-		_joy.output = Vector2(0.0, -1.0)
+		if _frames <= 120:
+			_joy.output = Vector2(0.0, -1.0)
+		else:
+			_joy.output = Vector2(0.7, -0.7)
+			phase = "FWD+RIGHT"
 
 	if _frames % 30 == 0:
-		var spd := 0.0
+		var kmh := 0.0
+		var xx := 0.0
 		var zz := 0.0
+		var yaw := 0.0
 		if _car != null:
-			spd = _car.linear_velocity.length()
+			kmh = _car.linear_velocity.length() * 3.6
+			xx = _car.global_position.x
 			zz = _car.global_position.z
-		print("frame=%d  joy_found=%s  car_found=%s  z=%.2f  speed=%.2f" % [
-			_frames, str(_joy != null), str(_car != null), zz, spd])
+			yaw = rad_to_deg(_car.rotation.y)
+		print("frame=%d  %s  speed=%.1f km/h  x=%.1f  z=%.1f  yaw=%.0f" % [
+			_frames, phase, kmh, xx, zz, yaw])
 
-	if _frames >= 150:
+	if _frames >= 300:
 		print("INPUTTEST DONE")
 		get_tree().quit()

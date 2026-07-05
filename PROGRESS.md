@@ -62,6 +62,10 @@ Android-first, iOS ulterior. Doar resurse gratuite/open-source.
   `_ready()`, înainte ca joystick-ul să se înregistreze (node ready-order). Acum îl caută
   leneș + joystick-ul se anunță în `_enter_tree()`. Nu s-a văzut pe PC (acolo merge tastatura).
 - De reglat pe telefon după feel: `max_engine_force`, `max_steer_angle`, `steer_speed`, `wheel_friction_slip`, parametrii de suspensie.
+- **Tuning v2 (după primul test pe telefon):** motorul era mult prea slab (260 → 2200),
+  aderență mărită (3.5 → 9.0), tracțiune integrală (toate 4 roțile trag), viraj mai blând
+  (0.6 → 0.45 rad) + viraj care se domolește la viteză mare (anti-spin). Acum: 0→96 km/h
+  în ~3s drept, viraj în arc controlat. Verificat cu `input_path_test`.
 
 ---
 
