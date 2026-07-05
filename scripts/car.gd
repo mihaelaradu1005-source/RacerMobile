@@ -109,9 +109,10 @@ func _physics_process(delta: float) -> void:
 		steer_input = 0.0
 
 	# Ease the steering toward the target angle so turns aren't instant.
-	# Positive steering turns the car toward +X (driver's right), so pushing the
-	# stick right (input.x > 0) maps straight through.
-	var target_steer := steer_input * max_steer_angle * speed_factor
+	# From the chase camera (behind the car), positive VehicleWheel3D steering
+	# turns the car to the LEFT of the screen, so we negate: pushing the stick
+	# right (input.x > 0) must steer visually right.
+	var target_steer := -steer_input * max_steer_angle * speed_factor
 	steering = move_toward(steering, target_steer, steer_speed * delta)
 
 
