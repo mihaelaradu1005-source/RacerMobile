@@ -97,14 +97,16 @@ petice de iarbă în grup `low_grip` (aderență 3) → mașina alunecă pe iarb
 - [ ] Pistă cu 8-10 viraje (deocamdată circuit simplu)
 - [x] Sistem checkpoint-uri (Area3D) — 4 checkpoint-uri, ordine impusă (fără scurtături)
 - [x] Cronometrare lap + best time — `race_manager.gd`, afișate în HUD
-- [ ] AI care urmărește un spline (`Path3D` + `PathFollow3D`)
-- [ ] AI frânează în viraje
-- [~] HUD: viteză, treaptă, timp, poziție (poziție vine cu AI)
-- [ ] **Deliverable:** mod „time trial" + mod „race vs 1 AI", complet jucabile
+- [x] AI care urmărește un spline (`Path3D` + `PathFollow3D`) — `ai_driver.gd`, pe șine
+- [x] AI frânează în viraje — încetinește după cât de strâns e virajul din față (lookahead)
+- [x] HUD: viteză, treaptă, timp, poziție — locul P1/P2 calculat în `race_manager`
+- [x] **Deliverable:** mod „time trial" + mod „race vs 1 AI", complet jucabile ✓ (jucabil)
 
-**Note Faza 4:** `world.tscn` acum e circuit (bloc central `Center`, 4 checkpoint-uri în `Checkpoints`,
-linie start la (70,0,0)). Mașina pleacă la (70,1,-20) sens invers acelor de ceas. `tests/race_test.tscn`
-verifică numărarea tururilor prin teleportare. Bumps/iarba scoase pentru pistă curată. Urmează: AI + poziție.
+**Note Faza 4:** `world.tscn` = circuit (bloc central `Center`, 4 checkpoint-uri, linie start la (70,0,0),
+sens invers acelor de ceas). AI: `RacingLine` (Path3D, buclă 9 puncte) + `AICar` (PathFollow3D, `ai_driver.gd`,
+mașină portocalie pe șine). AI-ul n-are coliziune (jucătorul trece prin el) — de adăugat mai târziu. Poziția
+P1/P2 în `race_manager` (compară tur+progres pe curbă). Teste: `race_test`, `ai_test`.
+**Faza 4 jucabilă gata.** Rămâne polish (pistă cu mai multe viraje, coliziune AI) și Faza 5-6.
 
 ---
 

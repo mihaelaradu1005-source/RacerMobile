@@ -28,5 +28,8 @@ func _process(_delta: float) -> void:
 	if mgr == null:
 		text = line1
 		return
-	text = "%s\nTur %d   %s   ·   record %s" % [
-		line1, mgr.lap + 1, _fmt_time(mgr.lap_time), _fmt_time(mgr.best_time)]
+	var line2 := "Tur %d   %s   ·   record %s" % [
+		mgr.lap + 1, _fmt_time(mgr.lap_time), _fmt_time(mgr.best_time)]
+	if mgr.has_opponent:
+		line2 += "   ·   locul P%d" % mgr.position
+	text = "%s\n%s" % [line1, line2]

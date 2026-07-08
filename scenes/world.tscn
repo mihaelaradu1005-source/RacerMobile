@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cfb1r12fte3xg"]
+[gd_scene load_steps=26 format=3 uid="uid://cfb1r12fte3xg"]
 
 [ext_resource type="Script" path="res://scripts/camera_follow.gd" id="1_camera"]
 [ext_resource type="Script" path="res://scripts/virtual_joystick.gd" id="2_joystick"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
 [ext_resource type="Script" path="res://scripts/action_button.gd" id="5_button"]
 [ext_resource type="Script" path="res://scripts/race_manager.gd" id="6_manager"]
+[ext_resource type="Script" path="res://scripts/ai_driver.gd" id="7_ai"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMat"]
 albedo_color = Color(0.28, 0.28, 0.3, 1)
@@ -60,6 +61,22 @@ size = Vector3(60, 3, 5)
 
 [sub_resource type="BoxShape3D" id="CpShapeTB"]
 size = Vector3(5, 3, 45)
+
+[sub_resource type="Curve3D" id="RacingCurve"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 70, 0.5, -30, 0, 0, 0, 0, 0, 0, 70, 0.5, 30, 0, 0, 0, 0, 0, 0, 30, 0.5, 77, 0, 0, 0, 0, 0, 0, -30, 0.5, 77, 0, 0, 0, 0, 0, 0, -70, 0.5, 30, 0, 0, 0, 0, 0, 0, -70, 0.5, -30, 0, 0, 0, 0, 0, 0, -30, 0.5, -77, 0, 0, 0, 0, 0, 0, 30, 0.5, -77, 0, 0, 0, 0, 0, 0, 70, 0.5, -30),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 9
+
+[sub_resource type="StandardMaterial3D" id="AICarMat"]
+albedo_color = Color(0.95, 0.45, 0.1, 1)
+roughness = 0.4
+metallic = 0.3
+
+[sub_resource type="BoxMesh" id="AICarMesh"]
+material = SubResource("AICarMat")
+size = Vector3(1.8, 0.7, 4)
 
 [node name="World" type="Node3D"]
 
@@ -149,6 +166,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -77)
 
 [node name="Col" type="CollisionShape3D" parent="Checkpoints/CP3"]
 shape = SubResource("CpShapeTB")
+
+[node name="RacingLine" type="Path3D" parent="."]
+curve = SubResource("RacingCurve")
+
+[node name="AICar" type="PathFollow3D" parent="RacingLine"]
+rotation_mode = 1
+script = ExtResource("7_ai")
+
+[node name="Body" type="MeshInstance3D" parent="RacingLine/AICar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("AICarMesh")
 
 [node name="Car" parent="." instance=ExtResource("3_car")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 1, -20)
