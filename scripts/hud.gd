@@ -28,6 +28,10 @@ func _process(_delta: float) -> void:
 	if mgr == null:
 		text = line1
 		return
+	if not mgr.started:
+		# Show a big 3-2-1 style countdown before the opponent is released.
+		text = "%s\nStart în %d..." % [line1, int(ceil(mgr.countdown))]
+		return
 	var line2 := "Tur %d   %s   ·   record %s" % [
 		mgr.lap + 1, _fmt_time(mgr.lap_time), _fmt_time(mgr.best_time)]
 	if mgr.has_opponent:

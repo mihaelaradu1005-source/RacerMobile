@@ -5,11 +5,12 @@ extends PathFollow3D
 # which keeps it predictable and impossible to send spinning off the track.
 # Looks ahead on the curve; the sharper the upcoming bend, the more it slows.
 
-## Cruising speed on the straights (m/s).
-@export var base_speed: float = 20.0
+## Cruising speed on the straights (m/s). A touch below the player's top speed
+## (~18 m/s) so the race is winnable.
+@export var base_speed: float = 16.5
 
 ## Minimum speed through the tightest corners (m/s).
-@export var min_corner_speed: float = 11.0
+@export var min_corner_speed: float = 10.0
 
 ## How quickly the AI changes speed (m/s per second).
 @export var accel: float = 12.0
@@ -22,6 +23,7 @@ var laps: int = 0
 var _speed: float = 0.0
 var _prev_ratio: float = 0.0
 var _curve: Curve3D
+var _manager: Node
 
 
 func _ready() -> void:
@@ -34,6 +36,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _curve == null:
+		return
+
+	# Wait for the start countdown so the AI can't leave before "GO".
+	if _manager == null:
+		_manager = get_tree().get_first_node_in_group("race_manager")
+	if _manager != null and not _manager.started:
 		return
 	var length := _curve.get_baked_length()
 

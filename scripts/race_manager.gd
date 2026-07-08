@@ -9,6 +9,12 @@ extends Node
 
 @export var checkpoints_path: NodePath
 
+## Countdown before the opponent is released, so it can't grab a head start.
+@export var start_delay: float = 3.0
+
+var started: bool = false
+var countdown: float = 0.0
+
 var lap: int = 0            # completed laps
 var lap_time: float = 0.0   # time on the current lap (seconds)
 var best_time: float = -1.0 # best completed lap, -1 until one is set
@@ -25,6 +31,7 @@ var _ai: Node
 
 func _ready() -> void:
 	add_to_group("race_manager")
+	countdown = start_delay
 	_player = _find_vehicle(get_tree().root)
 	var container := get_node_or_null(checkpoints_path)
 	if container == null:
@@ -48,6 +55,11 @@ func _find_vehicle(n: Node) -> VehicleBody3D:
 
 
 func _process(delta: float) -> void:
+	if not started:
+		countdown -= delta
+		if countdown <= 0.0:
+			countdown = 0.0
+			started = true
 	if _running:
 		lap_time += delta
 	_update_position()
